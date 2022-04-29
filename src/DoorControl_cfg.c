@@ -77,7 +77,7 @@ int main() {
     char ch[200];    //a string that will contain (at a time) a line from the assembly code file
 
     FILE *output;       //will contain the CFG after reconstruction 
-    FILE *summerize;    //will contain a reduced file representing the CFG as "csv" file ; easy to read for plotting perpuses
+    FILE *summarize;    //will contain a reduced file representing the CFG as "csv" file ; easy to read for plotting perpuses
     char buffer[100];   //a temporary buffer ; to be used to write to the output files
 
     flags detected; 
@@ -226,10 +226,10 @@ int main() {
 
     //TRAVERSAL & RECONSTRUCTION OF CFG AS A CSV FILE TO BE PROCESSED BY display_cfg.py
     //the out file has the following columns : current_bb_id | branch_bb_id | continue_bb_id
-    summerize = fopen("summerize.csv", "w");
+    summarize = fopen("summarize.csv", "w");
 
     snprintf(buffer, 100, "current_bb_id, branch_bb_id, continue_bb_id\n");
-    fputs(buffer, summerize);
+    fputs(buffer, summarize);
 
     //FIXME: Some branches doesn't exist within the scope of "controleurPorte_step" ; we MUST create additional nodes for them.
     //Here, we use the value "-1" to indicate non existing of an address (branch or continue) for a given basic block
@@ -237,14 +237,14 @@ int main() {
         snprintf(buffer, 100, "%d, %d, %d\n", cfg[i].id, \
                                               (cfg[i].bb_branch != NULL) ? cfg[i].bb_branch->id : -1, \
                                               (cfg[i].bb_continue != NULL) ? cfg[i].bb_continue->id : -1); //current_bb_id, branch_bb_id, continue_bb_id
-        fputs(buffer, summerize);
+        fputs(buffer, summarize);
     }
         
     
     //close opened files
     fclose(file_read);
     fclose(output);
-    fclose(summerize);
+    fclose(summarize);
 
     return 0;
 }
